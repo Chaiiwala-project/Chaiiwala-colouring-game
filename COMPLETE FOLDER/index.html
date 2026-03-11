@@ -1,0 +1,159 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Chaiiwala Sketch</title>
+    <!-- PWA icon for homescreen; replace path with your own file -->
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="manifest.json">
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('sw.js')
+            .then(reg => console.log('Offline mode ready!', reg))
+            .catch(err => console.log('Offline mode failed: ', err));
+        });
+      }
+    </script>
+</head>
+<body>
+    <div id="brightness-overlay"></div>
+
+    <div id="page-home" class="page active"> 
+        <div class="header-area">
+            <h1 class="title">Chaiiwala Sketch</h1>
+        </div>
+        
+        <div class="main-buttons">
+            <button class="btn btn-side bubble-animate" id="btn-go-settings">⚙️ Settings</button>
+            <button class="btn btn-play bubble-animate" id="btn-go-play">▶️ PLAY</button>
+            <button class="btn btn-side bubble-animate" id="btn-go-leave">🚪 Leave</button>
+        </div>
+    </div>
+
+    <div id="page-settings" class="page">
+        <button class="btn-back bubble-animate" onclick="showPage('page-home')">⬅ Back</button>
+        <div class="content-box text-center">
+            <h2>Settings</h2>
+            
+            <div class="setting-item">
+                <label for="slider-brightness">☀️ Brightness</label>
+                <input type="range" id="slider-brightness" min="10" max="100" value="100">
+            </div>
+            
+            <div class="setting-item">
+                <label for="slider-music">🎵 Music Volume</label>
+                <input type="range" id="slider-music" min="0" max="100" value="50">
+            </div>
+            <div class="setting-item">
+                <label for="slider-sfx">🔊 Sound Effects</label>
+                <input type="range" id="slider-sfx" min="0" max="100" value="50">
+            </div>
+
+            <div class="settings-actions">
+                <button class="btn-action btn-fullscreen bubble-animate" id="btn-fullscreen">🔲 Fullscreen Mode</button>
+                <button class="btn-action btn-reset bubble-animate" id="btn-reset-drawings">🗑️ Clear All Drawings</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="page-leave" class="page page-leave">
+        <button class="btn-back bubble-animate" onclick="showPage('page-home')">⬅ Back</button>
+        <div class="content-box text-center">
+            <h2>Are you sure you want to leave?</h2>
+            <p>All your unsaved coloring will be lost!</p>
+            <button class="btn btn-play bubble-animate" onclick="location.reload()">Yes, Reset Game</button>
+        </div>
+    </div>
+
+    <div id="page-selection" class="page">
+        <button class="btn-back bubble-animate" onclick="showPage('page-home')">⬅ Back Home</button>
+        
+        <button class="btn-upload bubble-animate" onclick="document.getElementById('custom-image-upload').click()">📸 ADD PICTURE</button>
+
+        <h2 class="selection-title">Choose a picture!</h2>
+        <div class="gallery" id="image-gallery"></div>
+
+        <input type="file" id="custom-image-upload" accept="image/png, image/jpeg, image/jpg"  aria-label="Upload custom picture" title="Upload custom picture"> 
+    </div>
+
+    <div id="page-mode" class="page page-mode">
+        <button class="btn-back bubble-animate" onclick="showPage('page-selection')">⬅ Back</button>
+        <h2 class="selection-title">How do you want to play?</h2>
+        <div class="mode-buttons-container">
+            <div class="mode-card bubble-animate" onclick="startDrawing('blank')">
+                <div class="mode-icon">📝</div>
+                <h3>Blank Canvas</h3>
+                <p>Draw from scratch!</p>
+            </div>
+            <div class="mode-card bubble-animate" onclick="startDrawing('outline')">
+                <div class="mode-icon">🎨</div>
+                <h3>Color the Picture</h3>
+                <p>Fill in the black & white lines!</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="page-coloring" class="page page-coloring">
+        <button class="btn-back bubble-animate absolute-top-left" onclick="goBackFromColoring()">⬅ Back</button>
+        
+        <button class="btn-done bubble-animate" onclick="finishAndCelebrate()">🎉 Done!</button>
+        
+        <img id="ref-thumbnail" class="ref-thumb bubble-animate" src="" alt="Reference" onclick="openRefModal()">
+
+        <div class="canvas-container">
+            <div class="zoom-wrapper" id="zoom-wrapper">
+                <canvas id="drawing-canvas"></canvas>
+                <img id="coloring-template" src="" alt="Template">
+            </div>
+
+            <div class="zoom-controls">
+                <button class="zoom-btn bubble-animate" id="zoom-in">➕</button>
+                <button class="zoom-btn bubble-animate" id="zoom-reset">🔄</button>
+                <button class="zoom-btn bubble-animate" id="zoom-out">➖</button>
+            </div>
+        </div>
+
+        <div class="toolbar toolbar-small">
+            <div class="tools-left">
+                <button class="tool-btn active bubble-animate" id="tool-pencil" onclick="openToolModal('pencil')">✏️</button>
+                <button class="tool-btn bubble-animate" id="tool-brush" onclick="openToolModal('brush')">🖌️</button>
+                <button class="tool-btn bubble-animate" id="tool-eraser" onclick="openToolModal('eraser')">🧼</button>
+                
+                <button class="tool-btn bubble-animate" id="tool-undo" onclick="undoLastStroke()">↩️</button>
+                
+                <button class="tool-btn bubble-animate" id="tool-colorpicker">🎨</button>
+            </div>
+            <div class="tools-right" id="main-colors"></div>
+        </div>
+    </div>
+    
+    <div id="tool-modal" class="modal-overlay">
+        <div class="modal-content text-center">
+            <h3 id="modal-title">Select Size</h3>
+            <div id="size-options" class="size-options-centered"></div>
+            <button class="btn-modal-close bubble-animate" onclick="closeToolModal()">Close</button>
+        </div>
+    </div>
+
+    <div id="color-modal" class="modal-overlay">
+        <div class="modal-content text-center">
+            <h3>More Colors!</h3>
+            <div id="extended-colors-grid" class="color-grid-centered"></div>
+            <button class="btn-modal-close bubble-animate" onclick="closeColorModal()">Close</button>
+        </div>
+    </div>
+
+    <div id="ref-modal" class="modal-overlay" onclick="closeRefModal()">
+        <img id="ref-large" class="ref-large-img" src="" alt="Enlarged Reference">
+    </div>
+
+    <audio id="bg-music" loop src="assets/images/song1.mp3"></audio>
+    <audio id="sfx-click" src="assets/images/Soundeffect1.mp3"></audio>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

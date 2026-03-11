@@ -1,0 +1,421 @@
+/* --- FUNDAMENTALS & RESET --- */
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; font-family: 'Comic Sans MS', cursive, sans-serif; outline: none;}
+
+body, html { 
+    width: 100%; height: 100%; overflow: hidden; 
+    background-color: #FFF8F0; 
+    background-image: url('../assets/images/backgroundimage2HD.png'); 
+    background-size: 108% 100%; 
+    background-position: center; 
+    background-repeat: no-repeat;
+}
+
+#brightness-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0); pointer-events: none; z-index: 9999; }
+
+/* --- SMOOTH ANIMATIONS --- */
+@keyframes dropDownBounce {
+  0% { transform: translateY(-200px); opacity: 0; }
+  50% { transform: translateY(20px); opacity: 1; }
+  75% { transform: translateY(-10px); }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes bubblePop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2) rotate(3deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes galleryIn {
+    0% { opacity: 0; transform: translateY(50px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* --- BUTTON & LOGO STYLING --- */
+.btn { border: none; border-radius: 20px; font-size: 2rem; font-weight: bold; cursor: pointer; box-shadow: 0 8px 0 rgba(0,0,0,0.2); transition: transform 0.1s, box-shadow 0.1s; display: flex; align-items: center; justify-content: center; gap: 10px;}
+.btn:active { transform: translateY(8px); box-shadow: 0 0 0 rgba(0,0,0,0); }
+.bubble-animate:active { animation: bubblePop 0.3s ease-out; }
+.app-logo { max-height: 60px; display: block; margin: 0 auto; margin-bottom: -15px;}
+
+/* --- PAGE MANAGEMENT --- */
+.page { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; }
+.page.active { display: flex; }
+
+/* --- 1. HOME SCREEN --- */
+.header-area { position: relative; width: 100%; top: 8%; text-align: center; }
+.title {
+    text-align: center; 
+    font-size: 6rem; 
+    
+    /* THE FIX: Changed from white to bright yellow! */
+    color: #FFD166; 
+    
+    font-weight: bold;
+    
+    /* THE FIX: Thicker dark border so it never blends into light backgrounds */
+    -webkit-text-stroke: 4px #333; 
+    
+    /* THE FIX: Added a triple-layered 3D shadow for maximum pop! */
+    text-shadow: 
+        0 0 20px rgba(255, 255, 255, 0.9), 
+        8px 8px 0 #E45E25,
+        12px 12px 0 #333; 
+        
+    padding: 0 20px; 
+    margin: 0 auto;
+    animation: dropDownBounce 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards; 
+}
+.main-buttons { display: flex; justify-content: center; align-items: center; gap: 30px; margin-top: auto; margin-bottom: 12%; }
+.btn-play { background-color: #E45E25; color: white; padding: 30px 60px; font-size: 3.5rem; border-radius: 40px; }
+.btn-side { 
+    /* THE FIX: Fun yellow background and chunky border! */
+    background-color: #FFD166; 
+    color: #333; 
+    padding: 20px 40px; 
+    border: 5px solid #333; 
+}
+.btn-back { 
+    position: absolute; 
+    top: 40px; 
+    left: 30px; 
+    background: white; 
+    color: #333;
+    border: 6px solid #333; 
+    border-radius: 20px; 
+    padding: 15px 25px; 
+    font-size: 1.8rem; 
+    font-weight: bold; 
+    cursor: pointer; 
+    z-index: 100; 
+    box-shadow: 0 10px 0 #333; 
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+.btn-back:active {
+    transform: translateY(8px);
+    box-shadow: 0 2px 0 #333;
+}
+
+/* --- 2. SETTINGS / LEAVE --- */
+#page-settings { 
+    background-image: url('../assets/images/backgroundimage5HD.png'); 
+    background-size: 106% 106%; 
+    background-position: center; 
+    background-repeat: no-repeat;
+    background-color: #118AB2; 
+    
+}
+
+.content-box { 
+    background: #f5cb58; 
+    padding: 40px; /* Slightly reduced padding so it fits nicely on smaller screens */
+    border-radius: 30px;    
+    width: 90%; /* Automatically scales based on the window! */
+    max-width: 600px; /* Stops it from getting too wide on giant monitors */
+    
+    /* THE FIX: 'margin: auto' combined with your flexbox layout perfectly centers it! */
+    margin: auto; 
+    
+    /* THE FIX: Ensures the box never grows taller than the screen, adding a scrollbar if needed */
+    max-height: 85vh;
+    overflow-y: auto;
+    
+    border: 6px solid #333; 
+    box-shadow: 0 12px 0 #333, 0 20px 20px rgba(0,0,0,0.4); 
+}
+
+/* Make sure to completely DELETE the old `#page-settings .content-box` rule 
+   that had the "margin: 140px auto 0 auto;" in it! */
+
+/* Pushes the settings box down so it doesn't hide the background text */
+#page-settings .content-box {
+    margin: 140px auto 0 auto; 
+}
+
+/* --- SETTINGS NEW BUTTONS --- */
+.settings-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 30px;
+    align-items: center;
+}
+
+.btn-action {
+    width: 85%;
+    padding: 15px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-radius: 20px;
+    border: 4px solid #333;
+    cursor: pointer;
+    box-shadow: 0 6px 0 #333;
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.btn-action:active {
+    transform: translateY(6px);
+    box-shadow: 0 0px 0 #333;
+}
+
+.btn-fullscreen { background-color: #06D6A0; color: #333; }
+.btn-reset { background-color: #EF476F; color: white; border-color: #333; }
+.setting-item { margin: 25px 0; }
+.setting-item label { font-size: 2rem; display: block; margin-bottom: 20px; font-weight: bold; color: #333; }
+
+/* THE FIX: Centers the sliders perfectly */
+input[type=range] { 
+    width: 60%; 
+    transform: scale(1.5); 
+    transform-origin: center center; 
+    cursor: pointer; 
+    display: block; 
+    margin: 15px auto 0 auto; 
+}
+
+.text-center { text-align: center; }
+
+/* --- 3. SELECTION PAGE --- */
+#page-selection { 
+    background-image: url('../assets/images/backgroundimage4HD.png'); 
+    background-size: 100% 100%; 
+    background-position: center; 
+    background-repeat: no-repeat;
+    background-color: #06D6A0; 
+}
+
+.page-leave { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);}
+.page-coloring { background-color: #FFF8F0; }
+.selection-title { 
+    color: white; 
+    font-size: 3.5rem; 
+    text-align: center; 
+    margin-top: 25px; 
+    padding: 15px 40px; 
+    background-color: #E45E25; 
+    border-radius: 20px; 
+    width: fit-content; 
+    margin-left: auto; 
+    margin-right: auto; 
+    border: 6px solid #333; 
+    box-shadow: 0 10px 0 #333, 0 20px 20px rgba(0,0,0,0.3); 
+    -webkit-text-stroke: 2px #333;
+    text-shadow: 4px 4px 0 #333;
+}
+.gallery { 
+    display: flex; 
+    flex-wrap: nowrap; 
+    overflow-x: auto; 
+    justify-content: flex-start; 
+    
+    /* THE FIX: This forces the boxes to float perfectly in the vertical middle! */
+    align-items: center; 
+    
+    gap: 40px; 
+    padding: 20px 60px; /* Slightly reduced top/bottom padding so they have room to breathe */
+    margin-top: 0; 
+    flex-grow: 1; 
+    overflow-y: hidden; 
+}
+.gallery::-webkit-scrollbar { height: 15px; }
+.gallery::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 10px; }
+.gallery::-webkit-scrollbar-thumb { background: white; border-radius: 10px; border: 3px solid #333; }
+.thumb { 
+    width: 380px; 
+    height: 380px; 
+    flex: 0 0 auto; 
+    object-fit: contain; 
+    cursor: pointer; 
+    background: white; 
+    
+    /* THE FIX: Signature Orange border instead of black! */
+    border: 8px solid #E45E25; 
+    border-radius: 30px; 
+    
+    /* THE FIX: Dark orange 3D shadow to match */
+    box-shadow: 0 15px 0 #B34517, 0 25px 20px rgba(0,0,0,0.4); 
+    
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; 
+}
+
+.thumb:hover { 
+    border-color: #118AB2; /* Magically turns blue when they hover over it! */
+    transform: translateY(-10px) scale(1.02); 
+    box-shadow: 0 25px 0 #B34517, 0 35px 20px rgba(0,0,0,0.4); 
+}
+
+.thumb:active {
+    transform: translateY(5px) scale(1); 
+    box-shadow: 0 10px 0 #B34517, 0 15px 10px rgba(0,0,0,0.4);
+}
+
+/* --- 4. COLOURING PAGE --- */
+.canvas-container { flex-grow: 1; position: relative; width: 100%; background: white; display: flex; justify-content: center; align-items: center; overflow: hidden; margin-top: 0; border-bottom: 2px solid #ddd; }
+.zoom-wrapper { position: absolute; width: 100%; height: 100%; transform-origin: 0 0; display: flex; justify-content: center; align-items: center; }
+#drawing-canvas { position: absolute; z-index: 1; touch-action: none; background: white; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+#coloring-template { position: absolute; z-index: 2; pointer-events: none; max-width: 100%; max-height: 100%; display: block; mix-blend-mode: multiply; }
+
+.zoom-controls { 
+    position: absolute; 
+    right: 20px; 
+    top: 200px; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 10px; 
+    z-index: 100; 
+}
+.zoom-btn { background: rgba(255,255,255,0.8); border: 3px solid #E45E25; color: #E45E25; width: 60px; height: 60px; border-radius: 50%; font-size: 2rem; display: flex; align-items: center; justify-content: center; cursor: pointer; -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+.toolbar-small { height: 80px; background: #333; display: flex; justify-content: space-between; align-items: center; padding: 0 15px; z-index: 10; border-top: 2px solid #555;}
+.tools-left, .tools-right { display: flex; gap: 10px; align-items: center; }
+.tool-btn { width: 55px; height: 55px; font-size: 1.8rem; border-radius: 10px; border: 3px solid transparent; background: #555; cursor: pointer; box-shadow: 0 3px 0 rgba(0,0,0,0.3); }
+.tool-btn.active { border-color: #06D6A0; background: #777; transform: translateY(-3px); }
+.color-swatch { width: 50px; height: 50px; border-radius: 50%; border: 4px solid white; cursor: pointer; transition: transform 0.1s, border-color 0.1s; }
+.color-swatch.active { transform: scale(1.1); border-color: #06D6A0; box-shadow: 0 0 10px white; }
+
+/* --- 5. MODALS (TOOLS & COLORS) --- */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 20px;}
+.modal-overlay.active { display: flex; }
+.modal-content { background: white; padding: 30px; border-radius: 30px; width: 90%; max-width: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 8px solid #FFD166; }
+.modal-content h3 { font-size: 2.5rem; margin-bottom: 25px; color: #333; }
+
+.size-options-centered { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; }
+.modal-size-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; background: #eee; border: 3px solid #ccc; border-radius: 20px; cursor: pointer; transition: background 0.2s, border-color 0.2s, transform 0.1s; color: #333; }
+.modal-size-btn:hover, .modal-size-btn.active { background: #06D6A0; border-color: white; color: white; transform: scale(1.05); }
+
+.modal-size-btn[data-size-id="small"] { width: 100px; height: 100px; padding: 10px;}
+.modal-size-btn[data-size-id="medium"] { width: 120px; height: 120px; padding: 10px;}
+.modal-size-btn[data-size-id="big"] { width: 140px; height: 140px; padding: 10px;}
+.size-preview-dot { background: currentColor; border-radius: 50%; margin-bottom: 10px; }
+.btn-modal-close { background: #E45E25; color: white; border: none; padding: 15px 30px; border-radius: 30px; font-size: 1.5rem; font-weight: bold; cursor: pointer;}
+
+.color-grid-centered { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-bottom: 30px; }
+.extended-color-swatch { width: 65px; height: 65px; border-radius: 50%; border: 6px solid #eee; cursor: pointer; box-shadow: 0 6px 0 rgba(0,0,0,0.1); transition: transform 0.1s, border-color 0.1s; }
+.extended-color-swatch:active, .extended-color-swatch.active { transform: translateY(4px) scale(1.1); border-color: #06D6A0; box-shadow: 0 0 15px rgba(0,214,160,0.5); }
+
+/* --- CUSTOM CURSORS FOR TOOLS --- */
+.cursor-pencil { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="black" stroke="white" stroke-width="1" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>') 0 32, crosshair !important; }
+.cursor-brush { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="black" stroke="white" stroke-width="1" d="M7 14c-1.66 0-3 1.34-3 3 0 1.31-1.16 2-2 2 .92 1.22 2.49 2 4 2 2.21 0 4-1.79 4-4 0-1.66-1.34-3-3-3zm13.71-9.37l-1.34-1.34a1.49 1.49 0 0 0-2.12 0L9.83 10.71l3.46 3.46 7.42-7.42a1.49 1.49 0 0 0 0-2.12z"/></svg>') 0 32, crosshair !important; }
+.cursor-eraser { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4" ry="4" fill="white" stroke="black" stroke-width="2"/></svg>') 16 16, cell !important; }
+
+.ref-thumb {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 160px; 
+    height: 160px; 
+    border: 4px solid #333;
+    border-radius: 15px;
+    background: white;
+    cursor: pointer;
+    object-fit: cover;
+    z-index: 100;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+}
+
+.ref-large-img {
+    max-width: 90%;
+    max-height: 90%;
+    border: 8px solid white;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    background: white;
+}
+
+/* --- MODE CHOICE PAGE --- */
+.page-mode { background-color: #9D4EDD; } 
+.mode-buttons-container {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    gap: 40px;
+    flex-grow: 1; 
+    padding-bottom: 50px;
+}
+.mode-card {
+    background: white;
+    padding: 30px;
+    border-radius: 30px;
+    width: 300px;  
+    height: 300px; 
+    text-align: center;
+    cursor: pointer;
+    
+    /* THE FIX: Blue border to match the purple background! */
+    border: 6px solid #118AB2; 
+    
+    /* THE FIX: Dark blue 3D shadow */
+    box-shadow: 0 12px 0 #095C78, 0 20px 20px rgba(0,0,0,0.4);
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.mode-card:hover { 
+    transform: scale(1.05); 
+    border-color: #FFD166; /* Turns yellow on hover! */
+}
+.mode-card .mode-icon { font-size: 4rem; margin-bottom: 15px; }
+.mode-card h3 { font-size: 2rem; color: #333; margin-bottom: 10px; }
+.mode-card p { font-size: 1.2rem; color: #666; }
+
+/* --- UPLOAD PICTURE BUTTON (TOP RIGHT) --- */
+.btn-upload {
+    position: absolute;
+    top: 40px; 
+    right: 30px; 
+    background: #FFD166; 
+    color: #333;
+    border: 6px solid #333; 
+    border-radius: 20px; 
+    padding: 15px 25px; 
+    font-size: 1.8rem; 
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 100;
+    box-shadow: 0 10px 0 #333; 
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+.btn-upload:active {
+    transform: translateY(8px);
+    box-shadow: 0 2px 0 #333;
+}
+
+#custom-image-upload { display: none; }
+
+/* --- "DONE" BUTTON (BOTTOM RIGHT) --- */
+.btn-done {
+    position: absolute;
+    bottom: 100px; /* Sits exactly 20px above your 80px toolbar! */
+    right: 20px;   /* Lines up perfectly with the zoom buttons above it */
+    background: #FFD166; 
+    color: #333;
+    border: 6px solid #333; 
+    border-radius: 20px; 
+    padding: 10px 30px; 
+    font-size: 2rem; 
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 100;
+    box-shadow: 0 8px 0 #333; 
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.btn-done:active {
+    transform: translateY(6px); /* Pushes straight down when clicked */
+    box-shadow: 0 2px 0 #333;
+}                       
+
+/* --- MAGIC CONFETTI --- */
+.confetti-piece {
+    position: fixed;
+    top: -20px;
+    z-index: 9999;
+    pointer-events: none; /* So kids can't accidentally click the falling confetti */
+    animation: fall linear forwards;
+}
+@keyframes fall {
+    to { transform: translateY(110vh) rotate(720deg); }
+}
