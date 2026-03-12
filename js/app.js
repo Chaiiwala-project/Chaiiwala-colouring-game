@@ -44,6 +44,20 @@ function showPage(pageId) {
     document.getElementById(pageId).classList.add('active');
 }
 
+// --- RESET GAME (works fully offline, no page reload) ---
+window.resetGame = function() {
+    savedDrawings = {};
+    currentImageId = null;
+    selectedImgData = null;
+    undoStack = [];
+    isDrawing = false;
+    currentTool = 'pencil';
+    currentColor = '#E45E25';
+    currentSize = 15;
+    if (canvas) ctx.clearRect(0, 0, canvas.width, canvas.height);
+    showPage('page-home');
+};
+
 document.getElementById('btn-go-settings').addEventListener('click', () => showPage('page-settings'));
 document.getElementById('btn-go-leave').addEventListener('click', () => showPage('page-leave'));
 // Starts the music and goes to the picture selection screen
