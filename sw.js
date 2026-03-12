@@ -1,11 +1,11 @@
-const CACHE_NAME = 'chaiiwala-v3';
+const CACHE_NAME = 'chaiiwala-v4';
 
 const ASSETS = [
   './',
   './index.html',
   './css/style.css',
   './js/app.js',
-  './js/manifest.json',
+  './manifest.json',
   './assets/fonts/DancingScript-Bold.woff2',
   './assets/images/backgroundimage2HD.png',
   './assets/images/Chaii Character.png',
