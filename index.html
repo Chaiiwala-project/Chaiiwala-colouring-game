@@ -6,11 +6,8 @@
     <title>Chaiiwala Sketch</title>
     <!-- PWA icon for homescreen; replace path with your own file -->
     <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="js/manifest.json">
 
     <script>
       if ('serviceWorker' in navigator) {
@@ -47,14 +44,7 @@
                 <input type="range" id="slider-brightness" min="10" max="100" value="100">
             </div>
             
-            <div class="setting-item">
-                <label for="slider-music">🎵 Music Volume</label>
-                <input type="range" id="slider-music" min="0" max="100" value="50">
-            </div>
-            <div class="setting-item">
-                <label for="slider-sfx">🔊 Sound Effects</label>
-                <input type="range" id="slider-sfx" min="0" max="100" value="50">
-            </div>
+
 
             <div class="settings-actions">
                 <button class="btn-action btn-fullscreen bubble-animate" id="btn-fullscreen">🔲 Fullscreen Mode</button>
@@ -68,7 +58,7 @@
         <div class="content-box text-center">
             <h2>Are you sure you want to leave?</h2>
             <p>All your unsaved coloring will be lost!</p>
-            <button class="btn btn-play bubble-animate" onclick="location.reload()">Yes, Reset Game</button>
+            <button class="btn btn-play bubble-animate" onclick="resetGame()">Yes, Reset Game</button>
         </div>
     </div>
 
@@ -154,8 +144,6 @@
         <img id="ref-large" class="ref-large-img" src="" alt="Enlarged Reference">
     </div>
 
-    <audio id="bg-music" loop src="assets/images/song1.mp3"></audio>
-    <audio id="sfx-click" src="assets/images/Soundeffect1.mp3"></audio>
 
     <script src="js/app.js"></script>
 </body>
