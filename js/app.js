@@ -731,10 +731,10 @@ window.sendEmail = function() {
     const tempCanvas = document.createElement('canvas');
     const tCtx = tempCanvas.getContext('2d');
     
-    // Shrink to 300px wide — EmailJS has a strict 50KB variable limit,
-    // so we keep the image small enough to stay well under it.
-    const scale = 300 / canvas.width;
-    tempCanvas.width = 300;
+    // Shrink to 200px wide — EmailJS has a strict 50KB variable limit
+    // for all template variables combined.
+    const scale = 200 / canvas.width;
+    tempCanvas.width = 200;
     tempCanvas.height = canvas.height * scale;
 
     // Fill white background
@@ -752,8 +752,8 @@ window.sendEmail = function() {
         tCtx.globalCompositeOperation = 'source-over'; 
     }
 
-    // Low quality JPEG to stay well under EmailJS's 50KB variable size limit.
-    const finishedArtworkData = tempCanvas.toDataURL("image/jpeg", 0.3);
+    // Quality 0.25 JPEG — keeps the base64 string well under EmailJS's 50KB limit.
+    const finishedArtworkData = tempCanvas.toDataURL("image/jpeg", 0.25);
     // ------------------------------------------------------
 
     const templateParams = {

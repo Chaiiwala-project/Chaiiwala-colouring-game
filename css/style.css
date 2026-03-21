@@ -483,7 +483,6 @@ input[type=range] {
 /* --- MODE CHOICE PAGE --- */
 .page-mode {
     background-color: #9D4EDD; /* Fallback colour */
-    position: relative;
     overflow: hidden;
 }
 
@@ -501,8 +500,10 @@ input[type=range] {
     z-index: 0;
 }
 
-/* Ensure all direct children of the mode page sit above the blurred background */
-.page-mode > * {
+/* Elevate only the non-positioned content above the blurred pseudo-element.
+   (btn-back already has position: absolute + z-index: 100 so it's fine on its own) */
+.page-mode .selection-title,
+.page-mode .mode-buttons-container {
     position: relative;
     z-index: 1;
 }
