@@ -481,7 +481,31 @@ input[type=range] {
 }
 
 /* --- MODE CHOICE PAGE --- */
-.page-mode { background-color: #9D4EDD; } 
+.page-mode {
+    background-color: #9D4EDD; /* Fallback colour */
+    position: relative;
+    overflow: hidden;
+}
+
+/* Blurred version of the homepage photo as background */
+.page-mode::before {
+    content: '';
+    position: absolute;
+    /* Slightly oversized so blur edges don't show */
+    top: -30px; left: -30px; right: -30px; bottom: -30px;
+    background-image: url('../assets/images/mainbackgroundpicture.png');
+    background-size: 108% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: blur(14px) brightness(0.75);
+    z-index: 0;
+}
+
+/* Ensure all direct children of the mode page sit above the blurred background */
+.page-mode > * {
+    position: relative;
+    z-index: 1;
+}
 .mode-buttons-container {
     display: flex;
     justify-content: center;
