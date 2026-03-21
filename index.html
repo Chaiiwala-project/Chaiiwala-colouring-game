@@ -1,0 +1,222 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Chaiiwala Sketch</title>
+    <!-- PWA icon for homescreen; replace path with your own file -->
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="manifest.json">
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('sw.js')
+            .then(reg => console.log('Offline mode ready!', reg))
+            .catch(err => console.log('Offline mode failed: ', err));
+        });
+      }
+    </script>
+</head>
+<body>
+    <div id="brightness-overlay"></div>
+
+   <div id="page-home" class="page active"> 
+        
+
+        <img src="assets/images/CW Blackburn Drive ThruCL.png" class="home-deco" id="deco-mid-left" alt="Drawing Example 2">
+        
+        <img src="assets/images/sheet 0007Coloured.png" class="home-deco" id="deco-bot-left" alt="Drawing Example 3">
+        <img src="assets/images/sceneColoured.png" class="home-deco" id="deco-bot-right" alt="Drawing Example 4">
+        
+        <img src="assets/images/STICKER SHEET 0006 bBW.png" class="home-deco" id="deco-top-right" alt="Drawing Example 5">
+        <img src="assets/images/STICKER SHEET 0005 BBW.png" class="home-deco" id="deco-corner-left" alt="Drawing Example 6">
+        <img src="assets/images/STICKER SHEET 0003 bbBW.png" class="home-deco" id="deco-corner-right" alt="Drawing Example 7">
+
+        <div class="header-area">
+            <h1 class="title">Chaiiwala Sketch</h1>
+        </div>
+        
+        <div class="main-buttons">
+            <button class="btn btn-side bubble-animate" id="btn-go-settings">⚙️ Settings</button>
+            <button class="btn btn-play bubble-animate" id="btn-go-play">▶️ PLAY</button>
+            <button class="btn btn-side bubble-animate" id="btn-go-leave">🚪 Leave</button>
+        </div>
+    </div>
+
+    <div id="page-settings" class="page">
+        <button class="btn-back bubble-animate" onclick="showPage('page-home')">⬅ Back</button>
+        <div class="content-box text-center">
+            <h2>Settings</h2>
+            
+            <div class="setting-item">
+                <label for="slider-brightness">☀️ Brightness</label>
+                <input type="range" id="slider-brightness" min="10" max="100" value="100">
+            </div>
+            
+            <div class="setting-item">
+                <label for="slider-music">🎵 Music Volume</label>
+                <input type="range" id="slider-music" min="0" max="100" value="50">
+            </div>
+            <div class="setting-item">
+                <label for="slider-sfx">🔊 Sound Effects</label>
+                <input type="range" id="slider-sfx" min="0" max="100" value="50">
+            </div>
+
+            <div class="settings-actions">
+                <button class="btn-action btn-fullscreen bubble-animate" id="btn-fullscreen">🔲 Fullscreen Mode</button>
+                <button class="btn-action btn-reset bubble-animate" id="btn-reset-drawings">🗑️ Clear All Drawings</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="page-leave" class="page page-leave">
+        <button class="btn-back bubble-animate" onclick="showPage('page-home')">⬅ Back</button>
+        <div class="content-box text-center">
+            <h2>Are you sure you want to leave?</h2>
+            <p>All your unsaved coloring will be lost!</p>
+            <button class="btn btn-play bubble-animate" onclick="location.reload()">Yes, Reset Game</button>
+        </div>
+    </div>
+
+   <div id="page-selection" class="page">
+        <button type="button" class="btn-back bubble-animate" onclick="showPage('page-home')">⬅ Back Home</button>
+        
+       <button type="button" class="btn-upload bubble-animate" onclick="openCameraModal()">📸 LIVE CAMERA</button>
+
+        <h2 class="selection-title">Choose a picture!</h2>
+        <div class="gallery" id="image-gallery"></div>
+
+    </div>
+
+    <div id="page-mode" class="page page-mode">
+        <button type="button" class="btn-back bubble-animate" onclick="showPage('page-selection')">⬅ Back</button>
+        <h2 class="selection-title">How do you want to play?</h2>
+        
+        <div class="mode-buttons-container">
+            <div class="mode-card bubble-animate" onclick="startDrawing('blank')">
+                <div class="mode-icon">📝</div>
+                <h3>Connect The Dots</h3>
+                <p>Draw and hold for magic shapes!</p>
+            </div>
+            <div class="mode-card bubble-animate" onclick="startDrawing('outline')">
+                <div class="mode-icon">🎨</div>
+                <h3>Color the Picture</h3>
+                <p>Fill in the black & white lines!</p>
+            </div>
+        </div>
+    </div>
+
+   <div id="page-coloring" class="page page-coloring">
+        <button class="btn-back bubble-animate absolute-top-left" onclick="goBackFromColoring()">⬅ Back</button>
+        
+        <button type="button" id="btn-help-tutorial" class="bubble-animate" onclick="showTutorial()">❓ Help</button>
+        <button class="btn-done bubble-animate" onclick="shareAndCelebrate()">📤 Share</button>
+        
+        <img id="ref-thumbnail" class="ref-thumb bubble-animate" src="" alt="Reference" onclick="openRefModal()">
+
+        <div class="canvas-container">
+            <div class="zoom-wrapper" id="zoom-wrapper">
+                <canvas id="drawing-canvas"></canvas>
+                <img id="coloring-template" src="" alt="Template">
+            </div>
+
+            <div class="zoom-controls">
+                <button class="zoom-btn bubble-animate" id="zoom-in">➕</button>
+                <button class="zoom-btn bubble-animate" id="zoom-reset">🔄</button>
+                <button class="zoom-btn bubble-animate" id="zoom-out">➖</button>
+            </div>
+        </div>
+
+        <div class="toolbar toolbar-small">
+            <div class="tools-left">
+                <button class="tool-btn active bubble-animate" id="tool-pencil" onclick="openToolModal('pencil')">✏️</button>
+                <button class="tool-btn bubble-animate" id="tool-brush" onclick="openToolModal('brush')">🖌️</button>
+                <button class="tool-btn bubble-animate" id="tool-eraser" onclick="openToolModal('eraser')">🧼</button>
+                
+                <button class="tool-btn bubble-animate" id="tool-undo" onclick="undoLastStroke()">↩️</button>
+                
+                <button class="tool-btn bubble-animate" id="tool-colorpicker">🎨</button>
+            </div>
+            <div class="tools-right" id="main-colors"></div>
+        </div>
+    </div>
+    
+    <div id="tool-modal" class="modal-overlay">
+        <div class="modal-content text-center">
+            <h3 id="modal-title">Select Size</h3>
+            <div id="size-options" class="size-options-centered"></div>
+            <button class="btn-modal-close bubble-animate" onclick="closeToolModal()">Close</button>
+        </div>
+    </div>
+
+    <div id="color-modal" class="modal-overlay">
+        <div class="modal-content text-center">
+            <h3>More Colors!</h3>
+            <div id="extended-colors-grid" class="color-grid-centered"></div>
+            <button class="btn-modal-close bubble-animate" onclick="closeColorModal()">Close</button>
+        </div>
+    </div>
+
+    <div id="ref-modal" class="modal-overlay" onclick="closeRefModal()">
+        <img id="ref-large" class="ref-large-img" src="" alt="Enlarged Reference">
+    </div>
+
+    <div id="tutorial-modal" class="modal-overlay">
+      <div class="modal-content text-center tut-modal-custom">
+            <h3 id="tut-title" class="tut-title-custom">Welcome!</h3>
+            <p id="tut-desc" class="tut-desc-custom"></p>
+            <div class="tut-buttons-container">
+                <button type="button" class="btn btn-side bubble-animate" onclick="closeTutorial()">Skip</button>
+                <button type="button" id="btn-tut-next" class="btn btn-play bubble-animate tut-next-btn" onclick="nextTutorialStep()">Next ➡️</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="camera-modal" class="modal-overlay">
+        <div class="modal-content text-center">
+            <h3>SAY CHAI!!!📸</h3>
+            
+            <video id="camera-feed" autoplay playsinline muted aria-label="Live camera feed" style="width: 100%; max-width: 400px; border-radius: 20px; border: 6px solid #333; background: #000;">
+                <track kind="captions" srclang="en" label="English">
+            </video>
+            
+            <div style="margin-top: 20px; display: flex; gap: 15px; justify-content: center; align-items: center;">
+                <button type="button" class="btn bubble-animate" id="btn-switch-camera" onclick="switchCamera()" aria-label="Switch Camera" style="font-size: 1.8rem; padding: 10px 15px; border: 4px solid #000; background: #fff; border-radius: 15px; color: #000;">🔄</button>
+                
+                <button type="button" class="btn btn-play bubble-animate" id="btn-snap-photo" aria-label="Take Photo" style="font-size: 1.5rem; padding: 15px 30px; border-width: 4px !important;">Snap! ✨</button>
+                
+                <button type="button" class="btn-modal-close bubble-animate" onclick="closeCameraModal()" aria-label="Cancel Camera">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <audio id="bg-music" loop src="assets/images/song1.mp3"></audio>
+    <audio id="sfx-click" src="assets/images/Soundeffect1.mp3"></audio>
+
+    <div id="email-modal" class="modal-overlay">
+        <div class="modal-content text-center">
+            <h3>Send Masterpiece!</h3>
+            <p class="email-subtitle">Enter an email address to send this picture.</p>
+            
+            <input type="email" id="share-email-input" placeholder="parent@email.com">
+            
+            <button class="btn btn-play bubble-animate email-send-btn" onclick="sendEmail()">Send ✉️</button>
+            <button class="btn-modal-close bubble-animate email-cancel-btn" onclick="closeEmailModal()">Cancel</button>
+        </div>
+    </div>
+
+    <div id="brush-pointer"></div>
+    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        // Replace this with your actual Public Key from the 'Account' page on EmailJS!
+        emailjs.init("zYqmQs6L_j4Q6oNTP"); 
+    </script>
+    
+    <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "name": "Chaiiwala Sketch",
+  "short_name": "Chaiiwala",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#FFF8F0",
+  "theme_color": "#E45E25"
+}
